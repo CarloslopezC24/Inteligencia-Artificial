@@ -1,96 +1,98 @@
 Diagnostico Arbol Binario
 
-
 package Trabajos;
 
 class Nodo {
- String nombre;
- Nodo izquierda, derecha;
+    String nombre;
+    Nodo izquierda, derecha;
 
- public Nodo(String nombre) {
-     this.nombre = nombre;
-     this.izquierda = this.derecha = null;
- }
+    public Nodo(String nombre) {
+        this.nombre = nombre;
+        this.izquierda = this.derecha = null;
+    }
 }
 
 class Arbol {
- private Nodo raiz;
+    private Nodo raiz;
 
- public Arbol() {
-     this.raiz = null;
- }
+    public Arbol() {
+        this.raiz = null;
+    }
 
- public boolean vacio() {
-     return raiz == null;
- }
+    public boolean vacio() {
+        return raiz == null;
+    }
 
- public void insertar(String nombre) {
-     raiz = insertarRec(raiz, nombre);
- }
+    public void insertar(String nombre) {
+        raiz = insertarRec(raiz, nombre);
+    }
 
- private Nodo insertarRec(Nodo nodo, String nombre) {
-     if (nodo == null) {
-         return new Nodo(nombre);
-     }
-     if (nombre.compareTo(nodo.nombre) < 0) {
-         nodo.izquierda = insertarRec(nodo.izquierda, nombre);
-     } else if (nombre.compareTo(nodo.nombre) > 0) {
-         nodo.derecha = insertarRec(nodo.derecha, nombre);
-     }
-     return nodo;
- }
+    private Nodo insertarRec(Nodo nodo, String nombre) {
+        if (nodo == null) {
+            return new Nodo(nombre);
+        }
+        if (nombre.compareTo(nodo.nombre) < 0) {
+            nodo.izquierda = insertarRec(nodo.izquierda, nombre);
+        } else if (nombre.compareTo(nodo.nombre) > 0) {
+            nodo.derecha = insertarRec(nodo.derecha, nombre);
+        }
+        return nodo;
+    }
 
- public Nodo buscarNodo(String nombre) {
-     return buscarRec(raiz, nombre);
- }
+    public Nodo buscarNodo(String nombre) {
+        return buscarRec(raiz, nombre);
+    }
 
- private Nodo buscarRec(Nodo nodo, String nombre) {
-     if (nodo == null || nodo.nombre.equals(nombre)) {
-         return nodo;
-     }
-     if (nombre.compareTo(nodo.nombre) < 0) {
-         return buscarRec(nodo.izquierda, nombre);
-     } else {
-         return buscarRec(nodo.derecha, nombre);
-     }
- }
+    private Nodo buscarRec(Nodo nodo, String nombre) {
+        if (nodo == null || nodo.nombre.equals(nombre)) {
+            return nodo;
+        }
+        if (nombre.compareTo(nodo.nombre) < 0) {
+            return buscarRec(nodo.izquierda, nombre);
+        } else {
+            return buscarRec(nodo.derecha, nombre);
+        }
+    }
 
- public void inOrden() {
-     inOrdenRec(raiz);
- }
+    public void inOrden() {
+        inOrdenRec(raiz);
+    }
 
- private void inOrdenRec(Nodo nodo) {
-     if (nodo != null) {
-         inOrdenRec(nodo.izquierda);
-         System.out.println(nodo.nombre);
-         inOrdenRec(nodo.derecha);
-     }
- }
+    private void inOrdenRec(Nodo nodo) {
+        if (nodo != null) {
+            inOrdenRec(nodo.izquierda);
+            System.out.println(nodo.nombre);
+            inOrdenRec(nodo.derecha);
+        }
+    }
 }
 
 public class ArbolBinario {
-	public static void main(String[] args) {
-     Arbol arbol = new Arbol();
+    public static void main(String[] args) {
+        Arbol arbol = new Arbol();
+        arbol.insertar("Mariana");
+        arbol.insertar("Alexis");
+        arbol.insertar("Carlos");
+        arbol.insertar("Juan");
+        arbol.insertar("Felipe");  
 
-     arbol.insertar("Carlos");
-     arbol.insertar("Alexis");
-     arbol.insertar("Mariana");
-     arbol.insertar("Juan");
+        System.out.println("¿El árbol está vacío? " + arbol.vacio());
 
-     System.out.println("¿El árbol está vacío? " + arbol.vacio());
+        Nodo encontrado = arbol.buscarNodo("Carlos");
+        System.out.println("Nodo encontrado: " + (encontrado != null ? encontrado.nombre : "No encontrado"));
 
-     Nodo encontrado = arbol.buscarNodo("Pedro");
-     System.out.println("Nodo encontrado: " + (encontrado != null ? encontrado.nombre : "No encontrado"));
-
-     System.out.println("Recorrido en orden:");
-     arbol.inOrden();
- }
+        System.out.println("Recorrido en orden:");
+        arbol.inOrden();
+    }
 }
 
 ¿El árbol está vacío? false
-Nodo encontrado: No encontrado
+Nodo encontrado: Carlos
 Recorrido en orden:
 Alexis
 Carlos
+Felipe
 Juan
 Mariana
+
+
