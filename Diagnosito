@@ -4,7 +4,8 @@ package Trabajos;
 
 class Nodo {
     String nombre;
-    Nodo izquierda, derecha;
+    Nodo izquierda;
+    Nodo derecha;
 
     public Nodo(String nombre) {
         this.nombre = nombre;
@@ -85,6 +86,8 @@ public class ArbolBinario {
         arbol.inOrden();
     }
 }
+
+#Salida en la consola
 
 ¿El árbol está vacío? false
 Nodo encontrado: Carlos
