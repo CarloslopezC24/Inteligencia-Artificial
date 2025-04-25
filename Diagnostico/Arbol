@@ -1,0 +1,89 @@
+package Diagnostico;
+
+public class Arbol {
+    private Nodo raiz;
+
+    public Arbol() {
+        raiz = null;
+    }
+
+    public boolean estaVacio() {
+        return raiz == null;
+    }
+
+    public void insertar(String nombre) {
+        raiz = insertarNodo(raiz, nombre);
+    }
+
+    private Nodo insertarNodo(Nodo actual, String nombre) {
+        if (actual == null) {
+            return new Nodo(nombre);
+        }
+
+        int comparacion = nombre.compareTo(actual.nombre);
+
+        if (comparacion < 0) {
+            actual.izquierda = insertarNodo(actual.izquierda, nombre);
+        } else if (comparacion > 0) {
+            actual.derecha = insertarNodo(actual.derecha, nombre);
+        }
+
+        return actual;
+    }
+
+    public Nodo buscar(String nombre) {
+        return buscarNodoRec(raiz, nombre);
+    }
+
+    private Nodo buscarNodoRec(Nodo actual, String nombre) {
+        if (actual == null || actual.nombre.equals(nombre)) {
+            return actual;
+        }
+
+        return (nombre.compareTo(actual.nombre) < 0)
+            ? buscarNodoRec(actual.izquierda, nombre)
+            : buscarNodoRec(actual.derecha, nombre);
+    }
+
+    public void mostrarPreorden() {
+        System.out.println("Raíz: " + (raiz != null ? raiz.nombre : "Árbol vacío"));
+        recorrerPreorden(raiz);
+        System.out.println();
+    }
+
+    private void recorrerPreorden(Nodo actual) {
+        if (actual != null) {
+            System.out.print(actual.nombre + " ");
+            recorrerPreorden(actual.izquierda);
+            recorrerPreorden(actual.derecha);
+        }
+    }
+
+    public void mostrarInorden() {
+        System.out.println("Raíz: " + (raiz != null ? raiz.nombre : "Árbol vacío"));
+        recorrerInorden(raiz);
+        System.out.println();
+    }
+
+    private void recorrerInorden(Nodo actual) {
+        if (actual != null) {
+            recorrerInorden(actual.izquierda);
+            System.out.print(actual.nombre + " ");
+            recorrerInorden(actual.derecha);
+        }
+    }
+
+    public void mostrarPostorden() {
+        System.out.println("Raíz: " + (raiz != null ? raiz.nombre : "Árbol vacío"));
+        recorrerPostorden(raiz);
+        System.out.println();
+    }
+
+    private void recorrerPostorden(Nodo actual) {
+        if (actual != null) {
+            recorrerPostorden(actual.izquierda);
+            recorrerPostorden(actual.derecha);
+            System.out.print(actual.nombre + " ");
+        }
+    }
+}
