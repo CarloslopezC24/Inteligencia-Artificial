@@ -1,0 +1,82 @@
+FUNCTION_BLOCK AnimeRecommendation
+
+VAR_INPUT
+    accion : REAL; // Nivel de acción (0-10)
+    romance : REAL; // Nivel de romance (0-10)
+    comedia : REAL; // Nivel de comedia (0-10)
+    drama : REAL; // Nivel de drama (0-10)
+    fantasia : REAL; // Nivel de fantasía (0-10)
+    ciencia_ficcion : REAL; // Nivel de ciencia ficción (0-10)
+    terror : REAL; // Nivel de terror (0-10)
+END_VAR
+
+VAR_OUTPUT
+    recomendacion : REAL; // Índice de recomendación (0-100)
+END_VAR
+
+// Definir los niveles de cada género
+FUZZIFY accion
+    TERM baja := (0,1) (3,1) (6,0);
+    TERM media := (3,0) (5,1) (7,0);
+    TERM alta := (6,0) (8,1) (10,1);
+END_FUZZIFY
+
+FUZZIFY romance
+    TERM bajo := (0,1) (3,1) (6,0);
+    TERM medio := (3,0) (5,1) (7,0);
+    TERM alta := (6,0) (8,1) (10,1);
+END_FUZZIFY
+
+FUZZIFY comedia
+    TERM baja := (0,1) (3,1) (6,0);
+    TERM media := (3,0) (5,1) (7,0);
+    TERM alta := (6,0) (8,1) (10,1);
+END_FUZZIFY
+
+FUZZIFY drama
+    TERM bajo := (0,1) (3,1) (6,0);
+    TERM medio := (3,0) (5,1) (7,0);
+    TERM alta := (6,0) (8,1) (10,1);
+END_FUZZIFY
+
+FUZZIFY fantasia
+    TERM baja := (0,1) (3,1) (6,0);
+    TERM media := (3,0) (5,1) (7,0);
+    TERM alta := (6,0) (8,1) (10,1);
+END_FUZZIFY
+
+FUZZIFY ciencia_ficcion
+    TERM baja := (0,1) (3,1) (6,0);
+    TERM media := (3,0) (5,1) (7,0);
+    TERM alta := (6,0) (8,1) (10,1);
+END_FUZZIFY
+
+FUZZIFY terror
+    TERM baja := (0,1) (3,1) (6,0);
+    TERM media := (3,0) (5,1) (7,0);
+    TERM alta := (6,0) (8,1) (10,1);
+END_FUZZIFY
+
+// Salida de recomendación
+DEFUZZIFY recomendacion
+    TERM mala := (0,1) (20,1) (40,0);
+    TERM aceptable := (30,0) (50,1) (70,0);
+    TERM excelente := (60,0) (80,1) (100,1);
+    METHOD : COG;
+END_DEFUZZIFY
+
+// Reglas difusas
+RULEBLOCK Reglas
+    RULE 1: IF accion IS alta AND fantasia IS alta AND ciencia_ficcion IS media THEN recomendacion IS excelente;
+    RULE 2: IF romance IS alta AND drama IS alta AND comedia IS media THEN recomendacion IS excelente;
+    RULE 3: IF terror IS alta AND drama IS medio THEN recomendacion IS aceptable;
+    RULE 4: IF accion IS media AND ciencia_ficcion IS alta AND fantasia IS media THEN recomendacion IS excelente;
+    RULE 5: IF comedia IS alta AND romance IS medio THEN recomendacion IS aceptable;
+    RULE 6: IF accion IS baja AND drama IS alta AND romance IS alta THEN recomendacion IS aceptable;
+    RULE 7: IF comedia IS baja AND romance IS bajo AND accion IS baja THEN recomendacion IS mala;
+    RULE 8: IF terror IS alta AND accion IS media AND fantasia IS baja THEN recomendacion IS aceptable;
+    RULE 9: IF ciencia_ficcion IS alta AND accion IS alta AND comedia IS baja THEN recomendacion IS excelente;
+    RULE 10: IF fantasia IS media AND romance IS alta AND comedia IS media THEN recomendacion IS aceptable;
+END_RULEBLOCK
+
+END_FUNCTION_BLOCK
