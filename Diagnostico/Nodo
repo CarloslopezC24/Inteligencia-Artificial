@@ -7,6 +7,9 @@ public class Nodo {
 
     public Nodo(String nombre) {
         this.nombre = nombre;
-        this.izquierda = this.derecha = null;
+        izquierda = null;
+        derecha = null;
     }
 }
+
+
