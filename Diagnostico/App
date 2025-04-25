@@ -1,0 +1,36 @@
+package Diagnostico;
+
+public class App {
+    public static void main(String[] args) {
+        iniciarAplicacion();
+    }
+
+    private static void iniciarAplicacion() {
+        String[] valores = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
+        Arbol arbol = new Arbol();
+
+        mostrarEstado(arbol);
+
+        for (String valor : valores) {
+            arbol.insertar(valor);
+            System.out.println("Se insertó el nodo con el valor: " + valor);
+        }
+
+        mostrarEstado(arbol);
+
+        System.out.println("\nRecorrido en preorden:");
+        arbol.mostrarPreorden();
+
+        System.out.println("\nRecorrido en inorden:");
+        arbol.mostrarInorden();
+
+        System.out.println("\nRecorrido en postorden:");
+        arbol.mostrarPostorden();
+    }
+
+    private static void mostrarEstado(Arbol arbol) {
+        System.out.println(arbol.estaVacio()
+            ? "El árbol está vacío."
+            : "El árbol no está vacío.");
+    }
+}
