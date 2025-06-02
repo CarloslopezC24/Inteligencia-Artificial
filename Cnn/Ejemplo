@@ -1,0 +1,79 @@
+import keras
+from keras.utils import to_categorical
+import numpy as np
+import matplotlib.pyplot as plt
+import os
+from six.moves import urllib
+
+print("Versión de Keras:", keras.__version__)
+
+# Descargar archivo si no existe
+url_datos = 'https://github.com/bloolizard/PlayWithTensorFlow/raw/master/data_with_labels.npz'
+archivo_datos = 'data_with_labels.npz'
+
+if not os.path.exists(archivo_datos):
+    urllib.request.urlretrieve(url_datos, archivo_datos)
+
+# Cargar datos
+datos = np.load(archivo_datos)
+imagenes = datos['arr_0'] / 255.0
+etiquetas = datos['arr_1']
+categorias = to_categorical(etiquetas, num_classes=np.unique(etiquetas).size)
+
+# Dividir conjunto en entrenamiento y prueba
+np.random.seed(100)
+indices = np.random.permutation(imagenes.shape[0])
+tamaño_val = int(0.1 * len(indices))
+idx_val, idx_ent = indices[:tamaño_val], indices[tamaño_val:]
+
+x_val, x_ent = imagenes[idx_val], imagenes[idx_ent]
+y_val, y_ent = categorias[idx_val], categorias[idx_ent]
+
+x_ent = x_ent[..., np.newaxis]
+x_val = x_val[..., np.newaxis]
+
+print("Entrenamiento:", x_ent.shape, "| Validación:", x_val.shape)
+
+# Modelo CNN
+from keras.models import Sequential
+from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
+from keras.optimizers import SGD
+
+modelo = Sequential([
+    Conv2D(4, (5, 5), activation='relu', input_shape=(36, 36, 1)),
+    MaxPooling2D(pool_size=(2, 2)),
+    Flatten(),
+    Dense(32, activation='relu'),
+    Dropout(0.5),
+    Dense(5, activation='softmax')
+])
+
+modelo.compile(loss='categorical_crossentropy',
+               optimizer=SGD(learning_rate=0.01, momentum=0.9, nesterov=True),
+               metrics=['accuracy'])
+
+hist = modelo.fit(x_ent, y_ent,
+                  epochs=100,
+                  batch_size=128,
+                  validation_data=(x_val, y_val),
+                  verbose=1)
+
+# Graficar precisión
+plt.plot(hist.history['accuracy'], 'bo-', label='entrenamiento')
+plt.plot(hist.history['val_accuracy'], 'r^-', label='validación')
+plt.title("Precisión del modelo")
+plt.xlabel("Época")
+plt.ylabel("Precisión")
+plt.legend()
+plt.grid(True)
+plt.show()
+
+# Graficar pérdida
+plt.plot(hist.history['loss'], 'bo-', label='entrenamiento')
+plt.plot(hist.history['val_loss'], 'r^-', label='validación')
+plt.title("Pérdida del modelo")
+plt.xlabel("Época")
+plt.ylabel("Pérdida")
+plt.legend()
+plt.grid(True)
+plt.show()
