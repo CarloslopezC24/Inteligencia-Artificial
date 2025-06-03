@@ -1,0 +1,37 @@
+import numpy as np
+import skfuzzy as fuzz
+from skfuzzy import control as ctrl
+
+# Variables de entrada
+condicion = ctrl.Antecedent(np.arange(0, 11, 1), 'condicion')
+intensidad = ctrl.Antecedent(np.arange(0, 11, 1), 'intensidad')
+social = ctrl.Antecedent(np.arange(0, 11, 1), 'social')
+
+# Variable de salida
+deporte = ctrl.Consequent(np.arange(0, 51, 1), 'deporte')
+
+# Funciones de pertenencia
+condicion.automf(3)   # baja, media, alta
+intensidad.automf(3)
+social.automf(3)
+
+# Funciones de pertenencia para la salida (valor simbólico, representado numéricamente)
+# 0-10 = Yoga, 11-20 = Natación, 21-30 = Ciclismo, 31-40 = Fútbol, 41-50 = Crossfit
+deporte['yoga'] = fuzz.trimf(deporte.universe, [0, 0, 10])
+deporte['natacion'] = fuzz.trimf(deporte.universe, [10, 15, 20])
+deporte['ciclismo'] = fuzz.trimf(deporte.universe, [20, 25, 30])
+deporte['futbol'] = fuzz.trimf(deporte.universe, [30, 35, 40])
+deporte['crossfit'] = fuzz.trimf(deporte.universe, [40, 50, 50])
+
+# Reglas
+rules = [
+    ctrl.Rule(condicion['poor'] & intensidad['poor'] & social['poor'], deporte['yoga']),
+    ctrl.Rule(condicion['average'] & intensidad['average'] & social['average'], deporte['natacion']),
+    ctrl.Rule(condicion['good'] & intensidad['good'] & social['poor'], deporte['ciclismo']),
+    ctrl.Rule(condicion['good'] & intensidad['good'] & social['good'], deporte['futbol']),
+    ctrl.Rule(condicion['good'] & intensidad['good'] & social['average'], deporte['crossfit']),
+]
+
+# Sistema y simulación
+sistema_ctrl = ctrl.ControlSystem(rules)
+sistema = ctrl.ControlSystemSimulation(sistema_ctrl)
