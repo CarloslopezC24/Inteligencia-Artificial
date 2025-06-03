@@ -1,0 +1,40 @@
+import sys
+import os
+sys.path.insert(0, os.path.abspath('../src'))
+
+from sistema_experto import sistema
+
+# Entradas del usuario
+cond = int(input("Nivel de condición física (0 a 10): "))
+inten = int(input("Gusto por la intensidad (0 a 10): "))
+soc = int(input("Preferencia social (0 = individual, 10 = en equipo): "))
+
+sistema.input['condicion'] = cond
+sistema.input['intensidad'] = inten
+sistema.input['social'] = soc
+
+# Cálculo
+sistema.compute()
+
+resultado = sistema.output['deporte']
+print(f"\nValor difuso obtenido: {resultado:.2f}")
+
+# Clasificación simple
+if resultado <= 10:
+    recomendacion = "Yoga"
+elif resultado <= 20:
+    recomendacion = "Natación"
+elif resultado <= 30:
+    recomendacion = "Ciclismo"
+elif resultado <= 40:
+    recomendacion = "Fútbol"
+else:
+    recomendacion = "Crossfit"
+
+print(f"🏅 Deporte recomendado: {recomendacion}")
+
+# Guardar resultado
+with open("../out/salida.txt", "w") as f:
+    f.write(f"Entradas: condición={cond}, intensidad={inten}, social={soc}\n")
+    f.write(f"Valor difuso: {resultado:.2f}\n")
+    f.write(f"Recomendación: {recomendacion}\n")
