@@ -1,0 +1,9 @@
+# Contiene la base de reglas y funciones de pertenencia
+import numpy as np
+import skfuzzy as fuzz
+
+def generar_conjuntos(rango):
+    baja = fuzz.trimf(rango, [0, 0, 5])
+    media = fuzz.trimf(rango, [2, 5, 8])
+    alta = fuzz.trimf(rango, [5, 10, 10])
+    return baja, media, alta
